@@ -8,7 +8,7 @@ module.exports = function(a, b) {
     var hash = 'hit_'+(now-(now%conf['event-granularity'])).toString();
     r.hincrby(hash, event, 1, function(err, res) {
       if (res===1) {
-         
+         r.expire(hash, conf['event-expiration']);
       }
     });
   }
