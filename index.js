@@ -13,16 +13,22 @@ module.exports = function(a, b) {
     });
   }
   
-  interface.count = function(event, start, stop) {
-    console.log(event);
-    console.log(start);
-    console.log(stop)
+  interface.count = function(event, start, stop, onReady) {
     hashes = new Array();
     for (i=start;i<=stop;i++) {
       if (i%conf['event-granularity']===0) {hashes.push('hit_'+i.toString())};
     }
-    console.log(hashes)
+    var iterated = 0;
+    var total = 0;
+    hashes.forEach(function(hash) {
+      r.hget(hash, event, function(err, res) {
+        iterated++;
+        if (res) total+=parseInt(res);
+        if (iterated===hashes.length) onReady(null, total);
+      });
+    });
   }
+  
   return interface;
   
 }
