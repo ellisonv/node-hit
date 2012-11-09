@@ -9,7 +9,7 @@
   },
   "bugs": {
     "url": "http://github.com/ellisonv/node-hit/issues"
-  }
+  },
   "dependencies": {
     "redis": "0.8.2"
   }
