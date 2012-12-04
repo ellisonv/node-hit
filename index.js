@@ -58,6 +58,22 @@ module.exports = function(a, b) {
     });
   }
   
+  interface.events = function(start, stop, onReady) {
+    var hashes= new Array();
+    for (i=start-(start%conf['event-granularity']);i<=stop;i+=conf['event-granularity']) {
+      hashes.push('hit_'+i.toString());
+    }
+    var iterated = 0;
+    var events = new Object();
+    hashes.forEach(function(hash) {
+      r.hkeys(hash, function(err, res) {
+        for (i=0;i<res.length;i++) {events[res[i]]=true};
+        iterated++;
+        if (iterated===hashes.length) onReady(null, Object.keys(events));
+      });
+    });
+  }
+  
   return interface;
   
 }
